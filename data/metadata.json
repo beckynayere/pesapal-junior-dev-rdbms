@@ -16,6 +16,123 @@
     ],
     "primary_key": null,
     "unique_keys": [],
-    "row_count": 2
+    "row_count": 0
+  },
+  "products": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "int"
+      },
+      {
+        "name": "name",
+        "type": "varchar"
+      },
+      {
+        "name": "description",
+        "type": "varchar"
+      },
+      {
+        "name": "price",
+        "type": "varchar"
+      },
+      {
+        "name": "category",
+        "type": "varchar"
+      },
+      {
+        "name": "stock_quantity",
+        "type": "int"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp"
+      }
+    ],
+    "primary_key": null,
+    "unique_keys": [],
+    "row_count": 5
+  },
+  "customers": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "int"
+      },
+      {
+        "name": "first_name",
+        "type": "varchar"
+      },
+      {
+        "name": "last_name",
+        "type": "varchar"
+      },
+      {
+        "name": "email",
+        "type": "varchar"
+      },
+      {
+        "name": "phone",
+        "type": "varchar"
+      },
+      {
+        "name": "address",
+        "type": "varchar"
+      },
+      {
+        "name": "city",
+        "type": "varchar"
+      },
+      {
+        "name": "country",
+        "type": "varchar"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp"
+      }
+    ],
+    "primary_key": null,
+    "unique_keys": [],
+    "row_count": 4
+  },
+  "orders": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "int"
+      },
+      {
+        "name": "customer_id",
+        "type": "int"
+      },
+      {
+        "name": "product_id",
+        "type": "int"
+      },
+      {
+        "name": "quantity",
+        "type": "int"
+      },
+      {
+        "name": "total_price",
+        "type": "varchar"
+      },
+      {
+        "name": "status",
+        "type": "varchar"
+      },
+      {
+        "name": "order_date",
+        "type": "timestamp"
+      },
+      {
+        "name": "notes",
+        "type": "varchar"
+      }
+    ],
+    "primary_key": null,
+    "unique_keys": [],
+    "row_count": 5
   }
 }

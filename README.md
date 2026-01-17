@@ -88,9 +88,15 @@ Run python3 web-demo/app.py and visit http://localhost:5000 for:
 
 Products CRUD management
 
+<img width="1283" height="698" alt="image" src="https://github.com/user-attachments/assets/a07ab653-2261-4194-b7fd-351a4360ed36" />
+
+
 Customer records
 
+<img width="1283" height="698" alt="image" src="https://github.com/user-attachments/assets/0417b27d-4166-48cf-9fac-7fe0c853f573" />
+
 Orders with JOIN operations
+<img width="1283" height="698" alt="image" src="https://github.com/user-attachments/assets/fa0dccbd-ddcc-42bc-9386-25d5b9ff306a" />
 
 SQL console for direct queries
 

@@ -1,0 +1,21 @@
+{
+  "users": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "int"
+      },
+      {
+        "name": "name",
+        "type": "varchar"
+      },
+      {
+        "name": "email",
+        "type": "varchar"
+      }
+    ],
+    "primary_key": null,
+    "unique_keys": [],
+    "row_count": 2
+  }
+}

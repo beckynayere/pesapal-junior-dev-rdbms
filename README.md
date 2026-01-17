@@ -15,6 +15,8 @@ python3 main.py
 
 # Run Web Demo
 python3 web-demo/app.py
+<img width="1283" height="698" alt="image" src="https://github.com/user-attachments/assets/c8e46355-61a5-4678-b3bc-238e7585538e" />
+
 ✨ Features
 SQL-like query language with CREATE, SELECT, INSERT, UPDATE, DELETE
 

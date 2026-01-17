@@ -15,6 +15,10 @@ class Parser:
         # Remove multiple spaces and newlines
         query = re.sub(r'\s+', ' ', query)
         
+        # Check for comments and skip
+        if query.startswith('--'):
+            raise ValueError("Comments not supported")
+        
         if query.lower().startswith('create table'):
             return self._parse_create_table(query)
         elif query.lower().startswith('insert into'):
@@ -22,13 +26,23 @@ class Parser:
         elif query.lower().startswith('select'):
             return self._parse_select(query)
         elif query.lower().startswith('update'):
-            return self._parse_update_fixed(query)  # Use fixed version
+            return self._parse_update(query)
         elif query.lower().startswith('delete from'):
             return self._parse_delete(query)
         elif query.lower().startswith('drop table'):
             return self._parse_drop_table(query)
         else:
-            raise ValueError(f"Unsupported query: {query}")
+            # Check for REPL commands
+            query_lower = query.lower()
+            if query_lower == 'tables':
+                return {'type': 'repl_tables'}
+            elif query_lower.startswith('desc '):
+                table_name = query[5:].strip()
+                return {'type': 'repl_desc', 'table_name': table_name}
+            elif query_lower in ['exit', 'quit']:
+                return {'type': 'repl_exit'}
+            else:
+                raise ValueError(f"Unsupported query: {query}")
     
     def _parse_create_table(self, query: str) -> Dict:
         """Parse CREATE TABLE statement"""
@@ -180,10 +194,9 @@ class Parser:
             'conditions': conditions if conditions else None
         }
     
-    def _parse_update_fixed(self, query: str) -> Dict:
+    def _parse_update(self, query: str) -> Dict:
         """Parse UPDATE statement - FIXED VERSION"""
-        # Updated pattern to handle WHERE clause properly
-        pattern = r'update (\w+) set (.+?)(?:\s+where\s+(.+))?$'
+        pattern = r'update (\w+) set (.+?)(?: where (.+))?$'
         match = re.match(pattern, query, re.IGNORECASE)
         
         if not match:
@@ -218,36 +231,30 @@ class Parser:
                 
                 updates[col] = value
         
-        # Parse WHERE conditions - SIMPLIFIED AND FIXED
+        # Parse WHERE conditions
         conditions = {}
         if where_clause:
-            # Handle simple equality conditions
-            # Remove any trailing semicolon
-            where_clause = where_clause.rstrip(';')
-            
-            # Try to split on AND for multiple conditions
-            where_parts = [p.strip() for p in where_clause.split(' and ')]
-            for part in where_parts:
-                if '=' in part:
-                    col, value = part.split('=', 1)
-                    col = col.strip()
-                    value = value.strip()
-                    
-                    # Remove quotes if present
-                    if (value.startswith("'") and value.endswith("'")) or \
-                       (value.startswith('"') and value.endswith('"')):
-                        value = value[1:-1]
-                    
-                    # Try to convert to number
-                    try:
-                        if '.' in value:
-                            value = float(value)
-                        else:
-                            value = int(value)
-                    except ValueError:
-                        pass
-                    
-                    conditions[col] = value
+            # Simple equality condition
+            where_match = re.search(r'(\w+)\s*=\s*(.+)$', where_clause.strip())
+            if where_match:
+                col_name = where_match.group(1).strip()
+                value = where_match.group(2).strip()
+                
+                # Remove quotes if present
+                if (value.startswith("'") and value.endswith("'")) or \
+                   (value.startswith('"') and value.endswith('"')):
+                    value = value[1:-1]
+                
+                # Try to convert to number
+                try:
+                    if '.' in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                except ValueError:
+                    pass
+                
+                conditions[col_name] = value
         
         return {
             'type': 'update',
@@ -255,11 +262,6 @@ class Parser:
             'updates': updates,
             'conditions': conditions if conditions else None
         }
-    
-    # Keep the old _parse_update for reference but rename it
-    def _parse_update(self, query: str) -> Dict:
-        """OLD VERSION - Keeping for reference"""
-        return self._parse_update_fixed(query)  # Just call the fixed version
     
     def _parse_delete(self, query: str) -> Dict:
         """Parse DELETE statement"""
